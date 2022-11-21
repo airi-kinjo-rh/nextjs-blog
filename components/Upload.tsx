@@ -1,19 +1,15 @@
 import {NextPage} from "next";
 import React, { useState, useCallback } from "react";
 
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import { Typography, Button } from "@material-ui/core";
-
 import { useDropzone } from "react-dropzone";
 import  initFirebase from "../helpers/firebase";
 import { getStorage, getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
-import {alerts} from "firebase-functions/lib/v2";
+// import {alerts} from "firebase-functions/lib/v2";
 import Head from "next/head";
 import {PhotographIcon} from "@heroicons/react/solid";
 import UploadProgress from "./uploadProgress";
 import UploadPreview from "./uploadPreview";
-import Link from "next/link";
+// import Link from "next/link";
 
 type Image = {
     imageFile: Blob;
