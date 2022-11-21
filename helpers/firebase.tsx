@@ -1,6 +1,6 @@
-// import { initializeApp } from "firebase/app";
-import firebase from "firebase/app";
-import { getStorage } from "firebase/storage";
+import { initializeApp } from "firebase/app";
+// import firebase from "firebase/app";
+// import { getStorage } from "firebase/storage";
 // import { getAnalytics } from "firebase/analytics";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -18,16 +18,16 @@ const firebaseCredentials = {
     measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMNT_ID,
 }
 
-// function initFirebase() {
-//     if (typeof window !== undefined) {
-//         initializeApp(firebaseCredentials);
-//         console.log("Firebase has been init successfully");
-//     }
-// }
+export default function initFirebase() {
+    initializeApp(firebaseCredentials);
+    console.log("Firebase has been init successfully");
+    // if (typeof window !== undefined) {
+    //     initializeApp(firebaseCredentials);
+    //     console.log("Firebase has been init successfully");
+    // }
+}
+// export const storage = getStorage();
 // export default initFirebase;
 
 // Initialize Firebase
-firebase.initializeApp(firebaseCredentials);
-console.log("Firebase has been init successfully");
-export const storage = getStorage();
-export default firebase;
+// export default firebase;

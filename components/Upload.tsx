@@ -6,16 +6,21 @@ import CardContent from "@material-ui/core/CardContent";
 import { Typography, Button } from "@material-ui/core";
 
 import { useDropzone } from "react-dropzone";
-import firebase, { storage } from "../helpers/firebase";
-import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
+import  initFirebase from "../helpers/firebase";
+import { getStorage, getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
 import {alerts} from "firebase-functions/lib/v2";
 import Head from "next/head";
 import {PhotographIcon} from "@heroicons/react/solid";
+import UploadProgress from "./uploadProgress";
+import UploadPreview from "./uploadPreview";
+import Link from "next/link";
 
 type Image = {
     imageFile: Blob;
 };
 
+initFirebase();
+const storage = getStorage();
 const ImageUploader: NextPage = () => {
     // useState() を使って、コンポーネント内で状態管理を行いたい変数を宣言する。
     // const [count, setCount] = useState(0);
@@ -98,27 +103,35 @@ const ImageUploader: NextPage = () => {
             <Head>
                 <title>Image Uploader</title>
             </Head>
-            <div className={` ${loading ? "hidden" : ""} flex justify-center mt-10 `}>
-                <div className="dropzone">
-                    <p className="font-bold">Upload your image</p>
-                    <p>File should be jpeg, png...</p>
-                    <div {...getRootProps()} className="drag_drop_wrapper">
-                        {/*こういうもんっぽい*/}
-                        <input hidden {...getInputProps()} />
-                        <PhotographIcon className="w-16 h-16 text-blue-300" />
-                        {isDragActive ? (
-                            <p> Drop the photo here... </p>
-                        ) : (
-                            <p>Drag & Drop your image here</p>
-                        )}
+            <div className="main_container">
+                {!success && (
+                    <div className={` ${loading ? "hidden" : ""} flex justify-center mt-10 `}>
+                        <div className="dropzone">
+                            <p className="font-bold">Upload your image</p>
+                            <p>File should be jpeg, png...</p>
+                            <div {...getRootProps()} className="drag_drop_wrapper">
+                                {/* react-dropzone の書き方 */}
+                                <input hidden {...getInputProps()} />
+                                <PhotographIcon className="w-16 h-16 text-blue-300" />
+                                {/* isDragActive は、領域にファイルがドラッグされているかどうかのBool値 */}
+                                {isDragActive ? (
+                                    <p> Drop the photo here... </p>
+                                ) : (
+                                    <p>Drag & Drop your image here</p>
+                                )}
+                            </div>
+                            <p>Or</p>
+                            <div className="flex w-full justify-center">
+                                <button onClick={open} className="dropzone_button">
+                                    Choose a file
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <p>Or</p>
-                    <div className="flex w-full justify-center">
-                        <button onClick={open} className="dropzone_button">
-                            Choose a file
-                        </button>
-                    </div>
-                </div>
+                )}
+
+                {loading && <UploadProgress progress={progress} />}
+                {success && <UploadPreview imageUrl={imageUrl} />}
             </div>
         </>
     )

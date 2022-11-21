@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
+import Router, {useRouter} from "next/router";
 import { CheckCircleIcon } from "@heroicons/react/solid";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
@@ -8,13 +10,14 @@ type Props = {
 };
 
 const UploadPreview = ({ imageUrl }: Props) => {
-    const [copied, setCopied] = useState(false);
+    const [copied, setCopied] = useState<boolean>(false);
+    const router = useRouter();
 
     return (
         <>
             <div className="flex w-full justify-center">
                 <div className="preview_wrapper">
-                    <CheckCircleIcon className="text-green-200 mx-auto w-12 h-12" />
+                    <CheckCircleIcon className="text-green-300 mx-auto w-12 h-12" />
                     <p className="text-center">Upload Successful</p>
                     <div className="preview_img_box">
                         <Image
@@ -33,6 +36,8 @@ const UploadPreview = ({ imageUrl }: Props) => {
                             </button>
                         </CopyToClipboard>
                     </div>
+
+                    <button onClick= { router.reload }> Back to Image Uploader </button>
                 </div>
             </div>
         </>
