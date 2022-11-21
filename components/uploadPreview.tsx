@@ -37,7 +37,7 @@ const UploadPreview = ({ imageUrl }: Props) => {
                         </CopyToClipboard>
                     </div>
 
-                    <button onClick= { router.reload }> Back to Image Uploader </button>
+                    {/*<button onClick= { router.reload }> Back to Image Uploader </button>*/}
                 </div>
             </div>
         </>
