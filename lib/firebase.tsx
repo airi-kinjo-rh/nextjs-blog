@@ -13,6 +13,7 @@ import { initializeApp } from "firebase/app";
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
 export default async function initFirebase() {
+    console.log('bucket: ', process.env.FIREBASE_STORAGE_BUCKET)
     // const serviceAccount = require('./serviceAccountKey.json');
     const firebaseConfigs = {
         apiKey: process.env.FIREBASE_API_KEY,
