@@ -1,8 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { cert } from "firebase-admin/app";
-import path from "path";
-import { promises as fs } from "fs";
-import serviceAccount from "./serviceAccountKey.json";
+// import { cert } from "firebase-admin/app";
+// import serviceAccount from "./serviceAccountKey.json";
 // import firebase from "firebase/app";
 // import "firebase/compat/storage";
 // import 'firebase/compat/firestore';
@@ -16,6 +14,7 @@ import serviceAccount from "./serviceAccountKey.json";
 
 export default async function initFirebase() {
     // const serviceAccount = require('./serviceAccountKey.json');
+    var serviceAccount = require('./serviceAccountKey.json');
     const firebaseConfigs = {
         apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
         authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
