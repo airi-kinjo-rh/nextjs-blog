@@ -2,7 +2,7 @@ import {NextPage} from "next";
 import React, { useState, useCallback } from "react";
 
 import { useDropzone } from "react-dropzone";
-import  initFirebase from "../helpers/firebase";
+import { storage } from "../helpers/firebase";
 import { getStorage, getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
 // import {alerts} from "firebase-functions/lib/v2";
 import Head from "next/head";
@@ -15,8 +15,12 @@ type Image = {
     imageFile: Blob;
 };
 
-initFirebase();
-const storage = getStorage();
+// initFirebase();
+// const storage = firebase.app().storage('gs://your-project.appspot.com');
+// const storageRef = await storage.ref();
+
+// const storage = getStorage();
+// const storage = getStorage(process.env.NEXT_PUBLIC_FIREBASE_BUCKET_PATH);
 const ImageUploader: NextPage = () => {
     // useState() を使って、コンポーネント内で状態管理を行いたい変数を宣言する。
     // const [count, setCount] = useState(0);
