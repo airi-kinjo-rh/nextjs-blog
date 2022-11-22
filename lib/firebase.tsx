@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { cert } from "firebase-admin/app";
 // import firebase from "firebase/app";
 // import "firebase/compat/storage";
 // import 'firebase/compat/firestore';
@@ -11,6 +12,7 @@ import { initializeApp } from "firebase/app";
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
 export default function initFirebase() {
+    const serviceAccount = require('./serviceAccountKey.json');
     const firebaseConfigs = {
         apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
         authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -19,19 +21,16 @@ export default function initFirebase() {
         messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
         appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
         measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMNT_ID,
+        credential: cert(serviceAccount),
     }
-    console.log('storage ->', process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET)
-
     initializeApp(firebaseConfigs);
-// const storage = firebase.app().storage(process.env.NEXT_PUBLIC_FIREBASE_BUCKET_PATH);
+
+    // const admin = require("firebase-admin");
+    // const serviceAccount = require("./serviceAccountKey.json");
+    // admin.initializeApp({
+    //     credential: admin.credential.cert(serviceAccount)
+    // });
+
+
     console.log("Firebase has been init successfully");
-
 }
-
-    // if (typeof window !== undefined) {
-    //     initializeApp(firebaseConfigs);
-    //     console.log("Firebase has been init successfully");
-    // }
-
-// export const storage = getStorage();
-// export default initFirebase;

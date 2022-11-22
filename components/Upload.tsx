@@ -2,8 +2,9 @@ import {NextPage} from "next";
 import React, { useState, useCallback } from "react";
 
 import { useDropzone } from "react-dropzone";
-import initFirebase from "../helpers/firebase";
+import initFirebase from "../lib/firebase";
 import { getStorage, getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
+// import { getStorage } from 'firebase-admin/storage';
 // import {alerts} from "firebase-functions/lib/v2";
 import Head from "next/head";
 import {PhotographIcon} from "@heroicons/react/solid";
@@ -16,10 +17,7 @@ type Image = {
 };
 
 initFirebase();
-// const storage = firebase.app().storage('gs://your-project.appspot.com');
-// const storageRef = await storage.ref();
-// import 'firebase/compat/firestore';
-// const storage = firebase.app().storage(process.env.NEXT_PUBLIC_FIREBASE_BUCKET_PATH);
+// const storage = getStorage().bucket();
 const storage = getStorage();
 // const storage = getStorage(process.env.NEXT_PUBLIC_FIREBASE_BUCKET_PATH);
 const ImageUploader: NextPage = () => {
