@@ -1,5 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { cert } from "firebase-admin/app";
+import path from "path";
+import { promises as fs } from "fs";
+import serviceAccount from "./serviceAccountKey.json";
 // import firebase from "firebase/app";
 // import "firebase/compat/storage";
 // import 'firebase/compat/firestore';
@@ -11,8 +14,8 @@ import { cert } from "firebase-admin/app";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
-export default function initFirebase() {
-    const serviceAccount = require('./serviceAccountKey.json');
+export default async function initFirebase() {
+    // const serviceAccount = require('./serviceAccountKey.json');
     const firebaseConfigs = {
         apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
         authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -21,8 +24,9 @@ export default function initFirebase() {
         messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
         appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
         measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMNT_ID,
-        credential: cert(serviceAccount),
+        credential: serviceAccount,
     }
+    // console.log('firebaseConfig: \n', firebaseConfigs)
     initializeApp(firebaseConfigs);
 
     // const admin = require("firebase-admin");
