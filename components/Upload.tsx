@@ -2,7 +2,7 @@ import {NextPage} from "next";
 import React, { useState, useCallback } from "react";
 
 import { useDropzone } from "react-dropzone";
-import { storage } from "../helpers/firebase";
+import initFirebase from "../helpers/firebase";
 import { getStorage, getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
 // import {alerts} from "firebase-functions/lib/v2";
 import Head from "next/head";
@@ -15,11 +15,12 @@ type Image = {
     imageFile: Blob;
 };
 
-// initFirebase();
+initFirebase();
 // const storage = firebase.app().storage('gs://your-project.appspot.com');
 // const storageRef = await storage.ref();
-
-// const storage = getStorage();
+// import 'firebase/compat/firestore';
+// const storage = firebase.app().storage(process.env.NEXT_PUBLIC_FIREBASE_BUCKET_PATH);
+const storage = getStorage();
 // const storage = getStorage(process.env.NEXT_PUBLIC_FIREBASE_BUCKET_PATH);
 const ImageUploader: NextPage = () => {
     // useState() を使って、コンポーネント内で状態管理を行いたい変数を宣言する。
@@ -36,7 +37,9 @@ const ImageUploader: NextPage = () => {
         //Upload files to storage
         const file = acceptedFiles[0];
         if (!file) return;
-        uploadImageToFirebase({imageFile: file}).then(r => console.log('done upload image: ' + r));
+        uploadImageToFirebase({imageFile: file}).then(file =>
+            console.log('done upload image: ' + file)
+        );
     }, []);
 
     const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
@@ -49,12 +52,16 @@ const ImageUploader: NextPage = () => {
         onDrop,
     });
 
+    const metadata = {
+        contentType: 'image/jpeg'
+    };
+
     // Firebase Storage
     const uploadImageToFirebase = async ({ imageFile }: Image) => {
         try {
             setLoading(true);
             const storageRef = ref(storage, imageFile.name); // 引数2番めが、storageに保存するファイル名。 'images/' + file.name でディレクトリも指定可。
-            const uploadTask = uploadBytesResumable(storageRef, imageFile); // upload the file and metadata
+            const uploadTask = uploadBytesResumable(storageRef, imageFile, metadata); // upload the file and metadata
             // Listen for state changes, errors, and completion of the upload.
             uploadTask.on(
                 'state_changed',
@@ -93,7 +100,7 @@ const ImageUploader: NextPage = () => {
                 },
             );
         } catch (e: any) {
-            console.log(e.message);
+            console.log('uploadTask.on catch error -->', e.message);
             setLoading(false);
         }
     };
