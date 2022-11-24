@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
-import Router, {useRouter} from "next/router";
+import { useRouter} from "next/router";
 import { CheckCircleIcon } from "@heroicons/react/solid";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
@@ -37,7 +36,7 @@ const UploadPreview = ({ imageUrl }: Props) => {
                         </CopyToClipboard>
                     </div>
 
-                    {/*<button onClick= { router.reload }> Back to Image Uploader </button>*/}
+                    <button onClick= { router.reload }> Back to Image Uploader </button>
                 </div>
             </div>
         </>
