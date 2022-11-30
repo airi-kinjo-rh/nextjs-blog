@@ -15,5 +15,4 @@ export default async function initFirebase() {
     measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMNT_ID,
   };
   initializeApp(firebaseConfigs);
-  console.log("Firebase has been init successfully");
 }

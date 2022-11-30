@@ -1,10 +1,10 @@
-import Upload from "../components/upload/Upload";
+import UploadMultiFiles from "../components/upload/UploadMultiFiles";
 
 export default function ImageUploader() {
   return (
     <div className="App">
       <header className="App-header">
-        <Upload />
+        <UploadMultiFiles />
       </header>
     </div>
   );

@@ -1,52 +1,59 @@
 import { NextPage } from "next";
-import Head from "next/head";
-import React, { useState, useCallback } from "react";
-import { useDropzone } from "react-dropzone";
-import { PhotographIcon } from "@heroicons/react/solid";
 import {
-  getStorage,
   getDownloadURL,
+  getStorage,
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
 
 import initFirebase from "../../lib/firebase";
+import React, { useState, useCallback } from "react";
+import { useDropzone } from "react-dropzone";
+import Head from "next/head";
+import { PhotographIcon } from "@heroicons/react/solid";
+import Link from "next/link";
 import UploadProgress from "./UploadProgress";
 import UploadPreview from "./UploadPreview";
-import Link from "next/link";
 
 type Image = {
   imageFile: Blob;
 };
 
-initFirebase();
+initFirebase().then((r) =>
+  console.log("Firebase has been init successfully", r)
+);
 const storage = getStorage();
 
-const ImageUploader: NextPage = () => {
-  // useState() を使って、コンポーネント内で状態管理を行いたい変数を宣言する。
-  // const [count, setCount] = useState(0);
-  // ↑ count:変数, setCountメソッドを使ってcountの値を変更する。0がcount変数の初期値。
+const MultiImageUploader: NextPage = () => {
+  const [images, setImages] = useState([]);
+
   let [progress, setProgress] = useState<number>(0); //データアップロードの進捗率%
-  const [imageUrl, setImageUrl] = useState<string>(""); //アップロード完了後のファイルURL文字列
+  const [imageUrls, setImageUrls] = useState<string[]>([]); //アップロード完了後のファイルURL文字列
   const [loading, setLoading] = useState<boolean>(false); //これは、ただBooleanの変数を持ってるだけっぽいな
   const [success, setSuccess] = useState<boolean>(false); //loadingとどっちかで良さそうではある
 
-  // useCallback()はパフォーマンス向上のためのフックで、メモ化したコールバック関数を返す。useCallback(コールバック関数, [依存配列])
-  // メモ化: 同じ結果を返す処理において、初回のみ処理を実行記録しておき、2回目以降は前回の結果を計算せず値のみ呼び出せるようにすること。
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    //Upload files to storage
-    const file = acceptedFiles[0];
-    if (!file) return;
-    uploadImageToFirebase({ imageFile: file }).then((file) =>
-      console.log("done upload image: " + file)
-    );
+    acceptedFiles.map((file, index) => {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        setImages((prevState) => [
+          ...prevState,
+          { id: index, src: e.target.result },
+        ]);
+      };
+      console.log("images: ", images);
+
+      uploadImageToFirebase({ imageFile: file }).then((file) =>
+        console.log(index + " done upload image: " + file)
+      );
+    });
   }, []);
 
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     accept: {
       "image/*": [],
     },
-    maxFiles: 1,
+    maxFiles: 5,
     noClick: true,
     noKeyboard: true,
     onDrop,
@@ -94,7 +101,8 @@ const ImageUploader: NextPage = () => {
           // Upload completed successfully, now we can get the download URL
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             console.log("File available at: ", downloadURL);
-            setImageUrl(downloadURL);
+            // setImageUrls((prevState) => [...prevState, downloadURL]);
+            setImageUrls((prevState) => [...prevState, downloadURL]);
             setLoading(false);
             setSuccess(true);
           });
@@ -142,10 +150,10 @@ const ImageUploader: NextPage = () => {
         )}
 
         {loading && <UploadProgress progress={progress} />}
-        {success && <UploadPreview imageUrl={imageUrl} />}
+        {success && <UploadPreview imageUrls={imageUrls} />}
       </div>
     </>
   );
 };
 
-export default ImageUploader;
+export default MultiImageUploader;
