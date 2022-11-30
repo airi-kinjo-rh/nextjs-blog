@@ -14,7 +14,8 @@ type Test = {
 };
 
 const UploadPreview = ({ imageUrls }: Props) => {
-  const [copied, setCopied] = useState<boolean>(false);
+  // const [copied, setCopied] = useState<boolean>(false);
+  const [copied, setCopied] = useState<boolean[]>([]);
   const router = useRouter();
 
   const ShowImages = (image) => {
@@ -55,9 +56,18 @@ const UploadPreview = ({ imageUrls }: Props) => {
 
                 <div className="preview_link_container">
                   <span className="truncate">{image}</span>
-                  <CopyToClipboard text={image} onCopy={() => setCopied(true)}>
+                  <CopyToClipboard
+                    text={image}
+                    onCopy={() =>
+                      setCopied((prevStates) => {
+                        const newStates = [...prevStates];
+                        newStates[index] = true;
+                        return newStates;
+                      })
+                    }
+                  >
                     <button className="preview_copy_button">
-                      {copied ? "Copied!" : "Copy"}
+                      {copied[index] ? "Copied!" : "Copy"}
                     </button>
                   </CopyToClipboard>
                 </div>
@@ -65,7 +75,6 @@ const UploadPreview = ({ imageUrls }: Props) => {
             );
           })}
           {/*<ShowImages imageUrls={imageUrls} />*/}
-
           <button onClick={router.reload}> Back to Image Uploader </button>
         </div>
       </div>
